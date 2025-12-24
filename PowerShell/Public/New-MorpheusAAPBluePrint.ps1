@@ -43,7 +43,7 @@ function New-MorpheusAAPBluePrint
     {
         try
         {
-            "{0} - Creating the log file for for New-MorpheusAAP" -f ( Get-Date -Format FileDateTime ) | Out-File $LogPath -Append
+            "{0} - Creating the log file for for New-MorpheusAAPBluePrint" -f ( Get-Date -Format FileDateTime ) | Out-File $LogPath -Append
 
             $headers = @{}
             $headers.Add("accept", "application/json")
