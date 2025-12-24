@@ -1,0 +1,22 @@
+---
+Resources:
+  MyInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      AvailabilityZone: us-east-1a
+      ImageId: ami-069e612f612be3a2b #RHEL AMI
+      InstanceType: m4.large #minimum size for AAP
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash -xe
+          #running install commands per section 2.1, Installing automation controller with a database on the same node.
+          #Creating working directory
+          mkdir -p /opt/aap
+          cd /opt/aap
+          #retrieve/extract the AAP Installation Bundle from an S3 bucket
+          aws s3 cp s3://hpe-s3-bucket/ansible-automation-platform-setup-bundle-<latest-version>.tar.gz .
+          tar xvzf ansible-automation-platform-setup-bundle-<latest-version>.tar.gz
+          #the pool ID would be provided or retrieved from Parameter Store, Secrets Manager, etc
+          subscription-manager attach --pool=<pool_id>
+          #Copying the generic inventory file referenced in AAP Documentation to opt/aap. Below hypothetical situation would have it in an S3 Bucket.
+          aws s3 cp s3://hpe-s3-bucket/inventory.txt /opt/aap/inventory.txt
